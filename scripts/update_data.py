@@ -29,13 +29,14 @@ def normalize_items(raw, date: str):
     for idx, item in enumerate(items, 1):
         if not isinstance(item, dict):
             raise ValueError(f"第{idx}条不是对象")
-        missing = {"category", "audience", "title", "content", "action"} - set(item)
+        missing = {"category", "audience", "title", "content", "example", "action"} - set(item)
         if missing:
             raise ValueError(f"第{idx}条缺少字段: {sorted(missing)}")
         category = str(item["category"]).strip()
         audience = str(item["audience"]).strip()
         title = str(item["title"]).strip()
         content = re.sub(r"\s+", " ", str(item["content"]).strip())
+        example = re.sub(r"\s+", " ", str(item["example"]).strip())
         action = re.sub(r"\s+", " ", str(item["action"]).strip())
         if category not in CATEGORIES:
             raise ValueError(f"第{idx}条分类不正确: {category}")
@@ -43,17 +44,23 @@ def normalize_items(raw, date: str):
             raise ValueError(f"第{idx}条对象不正确: {audience}")
         if not 6 <= len(title) <= 24:
             raise ValueError(f"第{idx}条标题长度应为6-24字")
-        if not 45 <= len(content) <= 180:
-            raise ValueError(f"第{idx}条正文长度应为45-180字")
-        if not 12 <= len(action) <= 60:
-            raise ValueError(f"第{idx}条行动长度应为12-60字")
+        if not 120 <= len(content) <= 260:
+            raise ValueError(f"第{idx}条正文长度应为120-260字")
+        sentence_count = len(re.findall(r"[。！？]", content))
+        if not 5 <= sentence_count <= 9:
+            raise ValueError(f"第{idx}条正文应包含5-9个完整短句")
+        if not 20 <= len(example) <= 100:
+            raise ValueError(f"第{idx}条现场表达长度应为20-100字")
+        if not 15 <= len(action) <= 70:
+            raise ValueError(f"第{idx}条行动长度应为15-70字")
         if title in seen_titles:
             raise ValueError(f"标题重复: {title}")
         seen_titles.add(title)
         seen_categories.add(category)
         clean.append({
             "id": f"{date.replace('-', '')}-{idx:02d}", "category": category,
-            "audience": audience, "title": title, "content": content, "action": action,
+            "audience": audience, "title": title, "content": content,
+            "example": example, "action": action,
         })
     missing_categories = set(CATEGORIES) - seen_categories
     if missing_categories:

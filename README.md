@@ -24,4 +24,6 @@ python3 scripts/update_data.py --from-bank --date YYYY-MM-DD
 ```
 
 当日输入 JSON 是包含至少 5 个对象的数组，每个对象包含：
-`category`、`audience`、`title`、`content`、`action`。
+`category`、`audience`、`title`、`content`、`example`、`action`。
+
+内容规范：正文130—220个中文字符、5—8个短句；现场表达25—80字；今日行动18—55字。

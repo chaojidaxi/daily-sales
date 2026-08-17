@@ -11,8 +11,9 @@ class UpdateDataTests(unittest.TestCase):
             "category": category,
             "audience": "全员",
             "title": f"这是第{i}条有效销售提醒",
-            "content": "顾客表达需求以后，先确认她真正关注的使用场景，再给出少量清楚的选择。推荐不是把所有产品讲一遍，而是帮助顾客降低判断难度。",
-            "action": "今天选择一次接待，先确认场景再开始推荐。",
+            "content": "顾客表达需求以后，先确认她真正关注的使用场景，不要急着把所有卖点一次讲完。推荐的价值不是信息越多越好，而是帮助顾客降低判断难度。先听懂她在意版型、场合还是预算，再给出少量清楚的选择。每介绍一个款，都要说明它为什么适合眼前这个人。顾客感到被理解，才愿意继续试穿和比较。",
+            "example": "可以这样问：您今天更想解决上班穿搭，还是周末出门的搭配？",
+            "action": "今天选择一次完整接待，先确认场景和在意点，再开始推荐。",
         } for i, category in enumerate(CATEGORIES, 1)]
 
     def test_normalizes_five_categories(self):
