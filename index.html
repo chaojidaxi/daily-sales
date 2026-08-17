@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="description" content="给服装老板、店长和销售团队的每日销售深度简报。">
+  <meta name="description" content="给服装一批档口老板、店长和批发销售的每日深度简报。">
   <meta name="theme-color" content="#11110f">
-  <title>每日销售成长｜大喜</title>
+  <title>一批销售成长｜大喜</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     :root{
@@ -106,8 +106,8 @@
 <body>
   <header class="topbar">
     <div class="topbar-inner">
-      <div class="brand"><span class="brand-mark">喜<i></i></span><span>每日销售成长</span></div>
-      <div class="topbar-meta"><span>DAILY SALES BRIEF</span><span class="live">每天 14:00 更新</span></div>
+      <div class="brand"><span class="brand-mark">喜<i></i></span><span>一批销售成长</span></div>
+      <div class="topbar-meta"><span>WHOLESALE SALES BRIEF</span><span class="live">每天 14:00 更新</span></div>
     </div>
   </header>
 
@@ -115,24 +115,24 @@
     <div class="masthead-inner">
       <div class="date-block"><div class="date-day" id="dayNum">--</div><div class="date-rest" id="dateRest">LOADING</div></div>
       <div>
-        <div class="mast-kicker">TODAY'S PRACTICE</div>
-        <h1>今天，练一个<br>真正有用的动作。</h1>
-        <p class="masthead-desc">不是喊口号，也不是堆技巧。每天用一组有场景、有话术、有行动要求的内容，帮助老板、店长和销售把认知变成现场表现。</p>
+        <div class="mast-kicker">WHOLESALE PRACTICE</div>
+        <h1>今天，练一个<br>推动拿货与返单的动作。</h1>
+        <p class="masthead-desc">专为服装一批档口而写。每天围绕开发拿货客户、看版选款、组货报价、补单返单、动销反馈和团队带教，帮助老板、店长与批发销售把认知变成档口动作。</p>
         <div class="mast-stats"><span><strong id="todayCount">—</strong>今日内容</span><span><strong id="totalCount">—</strong>累计沉淀</span><span>更新 <strong id="updatedAt">—</strong></span></div>
       </div>
     </div>
   </section>
 
   <div class="mobile-tools">
-    <div class="mobile-top"><select class="date-select js-date" aria-label="选择日期"></select><input class="search js-search" type="search" placeholder="搜索内容…" aria-label="搜索内容"></div>
+    <div class="mobile-top"><select class="date-select js-date" aria-label="选择日期"></select><input class="search js-search" type="search" placeholder="搜索拿货、补单…" aria-label="搜索内容"></div>
     <div class="mobile-filter js-filters"></div>
   </div>
 
   <div class="workspace">
     <aside class="side">
-      <div class="side-section"><div class="side-label">浏览日期</div><select class="date-select js-date" aria-label="选择日期"></select><input class="search js-search" type="search" placeholder="搜索关键词…" aria-label="搜索内容"></div>
+      <div class="side-section"><div class="side-label">浏览日期</div><select class="date-select js-date" aria-label="选择日期"></select><input class="search js-search" type="search" placeholder="搜索拿货、补单、返单…" aria-label="搜索内容"></div>
       <div class="side-section"><div class="side-label">内容目录</div><ul class="filter-list js-filters"></ul></div>
-      <p class="side-note">不必一次全部发群。先看团队当天最需要解决的问题，再选一条分享、讨论和练习。</p>
+      <p class="side-note">不必一次全部发群。先看档口今天卡在开发、选款、报价、补单还是团队动作，再选一篇分享和练习。</p>
     </aside>
 
     <main class="feed">
@@ -141,7 +141,7 @@
     </main>
   </div>
 
-  <footer class="footer"><strong>大喜 · 每日销售成长</strong>　让认知落到动作，让动作产生结果。</footer>
+  <footer class="footer"><strong>大喜 · 一批销售成长</strong>　让认知落到档口动作，让动作推动拿货与返单。</footer>
   <div class="toast" id="toast">已复制完整内容，可以直接发群</div>
 
 <script>
@@ -182,18 +182,18 @@
     const items=source.filter(x=>(currentCategory==='全部'||x.category===currentCategory)&&(!keyword||[x.title,x.content,x.example,x.action,x.category,x.audience].join(' ').toLowerCase().includes(keyword)));
     const d=new Date(currentDate+'T00:00:00');$('#dayNum').textContent=currentDate?currentDate.slice(-2):'--';$('#dateRest').innerHTML=currentDate?`${d.getFullYear()} / ${String(d.getMonth()+1).padStart(2,'0')}<br>${['SUN','MON','TUE','WED','THU','FRI','SAT'][d.getDay()]}`:'LOADING';
     $('#todayCount').textContent=source.length;$('#visibleCount').textContent=items.length;$('#sectionTitle').textContent=currentDate===Object.keys(db.data).sort().reverse()[0]?'今日简报':currentDate+' 简报';
-    $('#sectionNote').textContent=items.length?`当前显示 ${items.length} 篇 · 每篇都包含观点、示例和行动`:'没有符合条件的内容';
+    $('#sectionNote').textContent=items.length?`当前显示 ${items.length} 篇 · 每篇都包含一批判断、档口表达和行动`:'没有符合条件的内容';
     $('#cards').innerHTML=items.length?items.map((x,i)=>`
       <article class="card" data-category="${esc(x.category)}" style="animation-delay:${i*.05}s">
         <header class="card-head"><div class="index">${String(i+1).padStart(2,'0')}</div><div><div class="category">${esc(x.category)}</div><h3>${esc(x.title)}</h3></div><span class="audience">适合 ${esc(x.audience)}</span></header>
-        <div class="card-body"><div class="prose">${splitProse(x.content)}</div>${x.example?`<div class="example"><span class="example-label">现场表达</span><div class="example-text">${esc(x.example)}</div></div>`:''}</div>
+        <div class="card-body"><div class="prose">${splitProse(x.content)}</div>${x.example?`<div class="example"><span class="example-label">档口表达</span><div class="example-text">${esc(x.example)}</div></div>`:''}</div>
         <footer class="card-foot"><div class="action"><strong>今日行动</strong>${esc(x.action)}</div><button class="copy" data-id="${esc(x.id)}">${copyIcon}复制整篇</button></footer>
       </article>`).join(''):'<div class="empty">没有符合条件的内容，换一个分类或关键词试试。</div>';
     $$('.copy').forEach(btn=>btn.onclick=()=>copyItem(btn.dataset.id,btn));syncControls();
   }
   async function copyItem(id,btn){
     const x=(db.data[currentDate]||[]).find(v=>v.id===id);if(!x)return;
-    const text=`【${x.title}】\n\n${x.content}${x.example?`\n\n现场表达：${x.example}`:''}\n\n今日行动：${x.action}`;
+    const text=`【${x.title}】\n\n${x.content}${x.example?`\n\n档口表达：${x.example}`:''}\n\n今日行动：${x.action}`;
     try{await navigator.clipboard.writeText(text)}catch(_){const t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove()}
     btn.innerHTML='已复制';btn.classList.add('done');$('#toast').classList.add('show');setTimeout(()=>{$('#toast').classList.remove('show');btn.innerHTML=copyIcon+'复制整篇';btn.classList.remove('done')},1800);
   }

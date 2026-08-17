@@ -10,7 +10,16 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 CATEGORIES = ["销售认知", "实战技巧", "客户经营", "执行心态", "团队管理"]
-AUDIENCES = {"老板", "店长", "销售", "全员", "老板/店长", "店长/销售"}
+AUDIENCES = {"老板/主理人", "店长", "批发销售", "全员", "老板/店长", "店长/批发销售"}
+WHOLESALE_TERMS = {
+    "一批", "批发", "档口", "拿货", "看版", "选款", "组货", "报价", "起批",
+    "补单", "返单", "动销", "发货", "库存", "订货会", "买手", "连锁客户",
+    "电商客户", "店老板", "价格带", "区域市场", "采购预算", "下游门店",
+}
+RETAIL_PHRASES = {
+    "顾客进店", "接待顾客", "邀请试穿", "试穿", "上班穿", "聚会穿", "日常穿",
+    "身材", "腰部", "穿搭推荐", "连带销售", "零售门店",
+}
 ROOT = Path(__file__).resolve().parents[1]
 DATA_PATH = ROOT / "data.json"
 BANK_PATH = ROOT / "content_bank.json"
@@ -53,6 +62,12 @@ def normalize_items(raw, date: str):
             raise ValueError(f"第{idx}条现场表达长度应为20-100字")
         if not 15 <= len(action) <= 70:
             raise ValueError(f"第{idx}条行动长度应为15-70字")
+        combined_text = title + content + example + action
+        retail_hits = sorted(phrase for phrase in RETAIL_PHRASES if phrase in combined_text)
+        if retail_hits:
+            raise ValueError(f"第{idx}条出现零售化场景词: {retail_hits}")
+        if not any(term in combined_text for term in WHOLESALE_TERMS):
+            raise ValueError(f"第{idx}条缺少服装一批业务场景词")
         if title in seen_titles:
             raise ValueError(f"标题重复: {title}")
         seen_titles.add(title)

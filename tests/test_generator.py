@@ -10,10 +10,10 @@ class UpdateDataTests(unittest.TestCase):
         return [{
             "category": category,
             "audience": "全员",
-            "title": f"这是第{i}条有效销售提醒",
-            "content": "顾客表达需求以后，先确认她真正关注的使用场景，不要急着把所有卖点一次讲完。推荐的价值不是信息越多越好，而是帮助顾客降低判断难度。先听懂她在意版型、场合还是预算，再给出少量清楚的选择。每介绍一个款，都要说明它为什么适合眼前这个人。顾客感到被理解，才愿意继续试穿和比较。",
-            "example": "可以这样问：您今天更想解决上班穿搭，还是周末出门的搭配？",
-            "action": "今天选择一次完整接待，先确认场景和在意点，再开始推荐。",
+            "title": f"这是第{i}条一批销售提醒",
+            "content": "一批档口销售接到拿货客户询问时，先确认对方所在区域、经营渠道和目标价格带。不要急着把所有新款一次发完，否则客户很难判断重点。先根据她的客群定位筛出一组主推款，再说明每个款适合怎样的下游门店。报价时同时讲清起批要求、现货情况和补单节奏。客户获得的是一套可判断的组货方案，而不是零散图片。信息越贴近她的生意，后续看版和返单越容易推进。",
+            "example": "可以这样问：您这次主要补哪个价格带，门店款和电商款各需要多少？",
+            "action": "今天由批发销售整理一位重点客户的区域、渠道和价格带后再推荐。",
         } for i, category in enumerate(CATEGORIES, 1)]
 
     def test_normalizes_five_categories(self):
@@ -33,6 +33,12 @@ class UpdateDataTests(unittest.TestCase):
         db = {"data": {"2026-08-16": [dict(items[0], id="old")]}}
         with self.assertRaisesRegex(ValueError, "过于相似"):
             reject_near_duplicates(items, db)
+
+    def test_rejects_retail_scenario(self):
+        bad = self.sample()
+        bad[0]["example"] = "顾客进店以后先邀请试穿，再根据身材介绍适合的日常穿搭。"
+        with self.assertRaisesRegex(ValueError, "零售化场景词"):
+            normalize_items(bad, "2026-08-17")
 
 
 if __name__ == "__main__":
