@@ -9,7 +9,10 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-CATEGORIES = ["销售认知", "实战技巧", "客户经营", "执行心态", "团队管理"]
+CATEGORIES = [
+    "销售认知", "批发技巧", "客户经营", "执行心态",
+    "服务履约", "团队协作", "店长管理", "销售复盘",
+]
 AUDIENCES = {"老板/主理人", "店长", "批发销售", "全员", "老板/店长", "店长/批发销售"}
 WHOLESALE_TERMS = {
     "一批", "批发", "档口", "拿货", "看版", "选款", "组货", "报价", "起批",
@@ -32,8 +35,8 @@ def load_json(path: Path):
 
 def normalize_items(raw, date: str):
     items = raw.get("items", raw) if isinstance(raw, dict) else raw
-    if not isinstance(items, list) or len(items) < 5:
-        raise ValueError("每天至少需要5条内容")
+    if not isinstance(items, list) or len(items) != len(CATEGORIES):
+        raise ValueError("每天必须正好8条内容，每个分类1条")
     seen_categories, seen_titles, clean = set(), set(), []
     for idx, item in enumerate(items, 1):
         if not isinstance(item, dict):
@@ -51,17 +54,20 @@ def normalize_items(raw, date: str):
             raise ValueError(f"第{idx}条分类不正确: {category}")
         if audience not in AUDIENCES:
             raise ValueError(f"第{idx}条对象不正确: {audience}")
-        if not 6 <= len(title) <= 24:
-            raise ValueError(f"第{idx}条标题长度应为6-24字")
-        if not 120 <= len(content) <= 260:
-            raise ValueError(f"第{idx}条正文长度应为120-260字")
+        if not 8 <= len(title) <= 16:
+            raise ValueError(f"第{idx}条标题长度应为8-16字")
+        if not 70 <= len(content) <= 115:
+            raise ValueError(f"第{idx}条正文长度应为70-115字")
         sentence_count = len(re.findall(r"[。！？]", content))
-        if not 5 <= sentence_count <= 9:
-            raise ValueError(f"第{idx}条正文应包含5-9个完整短句")
-        if not 20 <= len(example) <= 100:
-            raise ValueError(f"第{idx}条现场表达长度应为20-100字")
-        if not 15 <= len(action) <= 70:
-            raise ValueError(f"第{idx}条行动长度应为15-70字")
+        if not 3 <= sentence_count <= 5:
+            raise ValueError(f"第{idx}条正文应包含3-5个完整短句")
+        if not 20 <= len(example) <= 45:
+            raise ValueError(f"第{idx}条现场表达长度应为20-45字")
+        if not 15 <= len(action) <= 32:
+            raise ValueError(f"第{idx}条行动长度应为15-32字")
+        total_length = sum(map(len, (title, content, example, action)))
+        if not 150 <= total_length <= 220:
+            raise ValueError(f"第{idx}条总长度应为150-220字，当前{total_length}字")
         combined_text = title + content + example + action
         retail_hits = sorted(phrase for phrase in RETAIL_PHRASES if phrase in combined_text)
         if retail_hits:
@@ -79,7 +85,7 @@ def normalize_items(raw, date: str):
         })
     missing_categories = set(CATEGORIES) - seen_categories
     if missing_categories:
-        raise ValueError(f"每天必须覆盖5个分类，缺少: {sorted(missing_categories)}")
+        raise ValueError(f"每天必须覆盖8个分类，缺少: {sorted(missing_categories)}")
     return clean
 
 
@@ -113,17 +119,35 @@ def items_from_bank(date: str, db):
 def validate_database(db):
     if db.get("timezone") != "Asia/Shanghai":
         raise ValueError("timezone必须是Asia/Shanghai")
-    if int(db.get("daily_minimum", 0)) < 5:
-        raise ValueError("daily_minimum不能小于5")
+    if int(db.get("daily_minimum", 0)) != 8:
+        raise ValueError("daily_minimum必须等于8")
     for date, items in db.get("data", {}).items():
         datetime.strptime(date, "%Y-%m-%d")
         normalize_items(items, date)
     return True
 
 
+def validate_bank(bank):
+    if not isinstance(bank, list) or not bank:
+        raise ValueError("备用内容库必须是非空数组")
+    groups, titles = {}, []
+    for item in bank:
+        if "bank_day" not in item:
+            raise ValueError("备用内容缺少bank_day")
+        groups.setdefault(int(item["bank_day"]), []).append(item)
+        titles.append(str(item.get("title", "")).strip())
+    if len(titles) != len(set(titles)):
+        raise ValueError("备用内容库存在重复标题")
+    for day, items in sorted(groups.items()):
+        if len(items) != 8:
+            raise ValueError(f"备用第{day}组不是8篇")
+        normalize_items(items, f"2099-01-{day:02d}" if day <= 31 else "2099-01-31")
+    return len(groups)
+
+
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input", type=Path, help="包含当日5条内容的JSON文件")
+    parser.add_argument("--input", type=Path, help="包含当日8条内容的JSON文件")
     parser.add_argument("--date", help="发布日期 YYYY-MM-DD，默认北京时间当天")
     parser.add_argument("--from-bank", action="store_true", help="从未使用的备用内容组中发布")
     parser.add_argument("--replace", action="store_true", help="允许替换已有日期")
@@ -133,7 +157,8 @@ def main():
     db = load_json(DATA_PATH)
     if args.check:
         validate_database(db)
-        print(f"OK: {len(db.get('data', {}))} days")
+        bank_groups = validate_bank(load_json(BANK_PATH))
+        print(f"OK: {len(db.get('data', {}))} published days / {bank_groups} wholesale bank groups")
         return
 
     date = args.date or datetime.now(ZoneInfo("Asia/Shanghai")).strftime("%Y-%m-%d")

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="description" content="给服装一批档口老板、店长和批发销售的每日深度简报。">
+  <meta name="description" content="给服装一批档口老板、店长和批发销售的每日8条短分享。">
   <meta name="theme-color" content="#11110f">
   <title>一批销售成长｜大喜</title>
   <style>
@@ -62,7 +62,7 @@
     .cards{display:grid;gap:18px}
     .card{--cat:var(--accent);background:var(--white);border:1px solid rgba(23,23,21,.1);border-radius:var(--radius);overflow:hidden;box-shadow:0 1px 1px rgba(23,23,21,.03),0 8px 28px rgba(23,23,21,.035);animation:enter .45s both;transition:transform .22s ease,box-shadow .22s ease}
     .card:hover{transform:translateY(-2px);box-shadow:0 1px 1px rgba(23,23,21,.03),0 14px 38px rgba(23,23,21,.07)}
-    .card[data-category="销售认知"]{--cat:#f04b2f}.card[data-category="实战技巧"]{--cat:#2556d8}.card[data-category="客户经营"]{--cat:#216a4b}.card[data-category="执行心态"]{--cat:#8b49a5}.card[data-category="团队管理"]{--cat:#9a6a16}
+    .card[data-category="销售认知"]{--cat:#f04b2f}.card[data-category="批发技巧"]{--cat:#2556d8}.card[data-category="客户经营"]{--cat:#216a4b}.card[data-category="执行心态"]{--cat:#8b49a5}.card[data-category="服务履约"]{--cat:#0b7c86}.card[data-category="团队协作"]{--cat:#b3541e}.card[data-category="店长管理"]{--cat:#9a6a16}.card[data-category="销售复盘"]{--cat:#536070}
     .card-head{padding:23px 26px 18px;display:grid;grid-template-columns:42px minmax(0,1fr) auto;gap:14px;align-items:start;border-bottom:1px solid var(--line)}
     .index{font-size:12px;color:var(--muted);padding-top:3px;font-variant-numeric:tabular-nums}.index:before{content:"";display:block;width:20px;height:3px;background:var(--cat);margin-bottom:9px}
     .category{font-size:11px;color:var(--cat);font-weight:700;letter-spacing:.8px;margin-bottom:5px}
@@ -117,7 +117,7 @@
       <div>
         <div class="mast-kicker">WHOLESALE PRACTICE</div>
         <h1>今天，练一个<br>推动拿货与返单的动作。</h1>
-        <p class="masthead-desc">专为服装一批档口而写。每天围绕开发拿货客户、看版选款、组货报价、补单返单、动销反馈和团队带教，帮助老板、店长与批发销售把认知变成档口动作。</p>
+        <p class="masthead-desc">专为服装一批档口而写。<strong>每天固定更新8类</strong>，每类1条，覆盖认知、技巧、客户、执行、履约、协作、管理和复盘。内容不写长文章，选一条即可复制发群。</p>
         <div class="mast-stats"><span><strong id="todayCount">—</strong>今日内容</span><span><strong id="totalCount">—</strong>累计沉淀</span><span>更新 <strong id="updatedAt">—</strong></span></div>
       </div>
     </div>
@@ -132,11 +132,11 @@
     <aside class="side">
       <div class="side-section"><div class="side-label">浏览日期</div><select class="date-select js-date" aria-label="选择日期"></select><input class="search js-search" type="search" placeholder="搜索拿货、补单、返单…" aria-label="搜索内容"></div>
       <div class="side-section"><div class="side-label">内容目录</div><ul class="filter-list js-filters"></ul></div>
-      <p class="side-note">不必一次全部发群。先看档口今天卡在开发、选款、报价、补单还是团队动作，再选一篇分享和练习。</p>
+      <p class="side-note">每天8类各1条，不必全部发群。先看团队当天最需要解决什么，再选一条复制分享。</p>
     </aside>
 
     <main class="feed">
-      <div class="feed-head"><div><h2 id="sectionTitle">今日简报</h2><p id="sectionNote">正在读取内容…</p></div><div class="feed-count"><strong id="visibleCount">—</strong>篇</div></div>
+      <div class="feed-head"><div><h2 id="sectionTitle">今日短分享</h2><p id="sectionNote">正在读取内容…</p></div><div class="feed-count"><strong id="visibleCount">—</strong>条</div></div>
       <div class="cards" id="cards"><div class="empty">内容加载中…</div></div>
     </main>
   </div>
@@ -145,7 +145,7 @@
   <div class="toast" id="toast">已复制完整内容，可以直接发群</div>
 
 <script>
-  const CATEGORIES=['全部','销售认知','实战技巧','客户经营','执行心态','团队管理'];
+  const CATEGORIES=['全部','销售认知','批发技巧','客户经营','执行心态','服务履约','团队协作','店长管理','销售复盘'];
   let db=null,currentDate='',currentCategory='全部',keyword='';
   const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
   const esc=s=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
@@ -181,13 +181,13 @@
     const source=db?.data?.[currentDate]||[];
     const items=source.filter(x=>(currentCategory==='全部'||x.category===currentCategory)&&(!keyword||[x.title,x.content,x.example,x.action,x.category,x.audience].join(' ').toLowerCase().includes(keyword)));
     const d=new Date(currentDate+'T00:00:00');$('#dayNum').textContent=currentDate?currentDate.slice(-2):'--';$('#dateRest').innerHTML=currentDate?`${d.getFullYear()} / ${String(d.getMonth()+1).padStart(2,'0')}<br>${['SUN','MON','TUE','WED','THU','FRI','SAT'][d.getDay()]}`:'LOADING';
-    $('#todayCount').textContent=source.length;$('#visibleCount').textContent=items.length;$('#sectionTitle').textContent=currentDate===Object.keys(db.data).sort().reverse()[0]?'今日简报':currentDate+' 简报';
-    $('#sectionNote').textContent=items.length?`当前显示 ${items.length} 篇 · 每篇都包含一批判断、档口表达和行动`:'没有符合条件的内容';
+    $('#todayCount').textContent=source.length;$('#visibleCount').textContent=items.length;$('#sectionTitle').textContent=currentDate===Object.keys(db.data).sort().reverse()[0]?'今日短分享':currentDate+' 短分享';
+    $('#sectionNote').textContent=items.length?`当前显示 ${items.length} 条 · 每条只讲一个问题，可直接复制发群`:'没有符合条件的内容';
     $('#cards').innerHTML=items.length?items.map((x,i)=>`
       <article class="card" data-category="${esc(x.category)}" style="animation-delay:${i*.05}s">
         <header class="card-head"><div class="index">${String(i+1).padStart(2,'0')}</div><div><div class="category">${esc(x.category)}</div><h3>${esc(x.title)}</h3></div><span class="audience">适合 ${esc(x.audience)}</span></header>
         <div class="card-body"><div class="prose">${splitProse(x.content)}</div>${x.example?`<div class="example"><span class="example-label">档口表达</span><div class="example-text">${esc(x.example)}</div></div>`:''}</div>
-        <footer class="card-foot"><div class="action"><strong>今日行动</strong>${esc(x.action)}</div><button class="copy" data-id="${esc(x.id)}">${copyIcon}复制整篇</button></footer>
+        <footer class="card-foot"><div class="action"><strong>今日行动</strong>${esc(x.action)}</div><button class="copy" data-id="${esc(x.id)}">${copyIcon}复制分享</button></footer>
       </article>`).join(''):'<div class="empty">没有符合条件的内容，换一个分类或关键词试试。</div>';
     $$('.copy').forEach(btn=>btn.onclick=()=>copyItem(btn.dataset.id,btn));syncControls();
   }
@@ -195,7 +195,7 @@
     const x=(db.data[currentDate]||[]).find(v=>v.id===id);if(!x)return;
     const text=`【${x.title}】\n\n${x.content}${x.example?`\n\n档口表达：${x.example}`:''}\n\n今日行动：${x.action}`;
     try{await navigator.clipboard.writeText(text)}catch(_){const t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove()}
-    btn.innerHTML='已复制';btn.classList.add('done');$('#toast').classList.add('show');setTimeout(()=>{$('#toast').classList.remove('show');btn.innerHTML=copyIcon+'复制整篇';btn.classList.remove('done')},1800);
+    btn.innerHTML='已复制';btn.classList.add('done');$('#toast').classList.add('show');setTimeout(()=>{$('#toast').classList.remove('show');btn.innerHTML=copyIcon+'复制分享';btn.classList.remove('done')},1800);
   }
   load();
 </script>
