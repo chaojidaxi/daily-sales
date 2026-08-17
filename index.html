@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="每天更新5条销售认知、技巧、客户经营、心态与团队管理提醒。">
+  <meta name="theme-color" content="#f5f2eb">
+  <title>每日销售成长｜大喜</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#f5f2eb;--paper:#fffdf8;--ink:#20221f;--muted:#6f736b;
+      --line:#e4dfd4;--green:#245c45;--green-soft:#e5efe9;--gold:#b9862c;
+      --shadow:0 16px 48px rgba(45,50,42,.08);--radius:22px
+    }
+    body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    button,select,input{font:inherit}
+    .hero{position:relative;overflow:hidden;padding:68px 20px 42px;background:linear-gradient(155deg,#173c2f 0%,#245c45 62%,#8b6c31 150%);color:#fff}
+    .hero:before,.hero:after{content:"";position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.12)}
+    .hero:before{width:340px;height:340px;right:-130px;top:-190px}.hero:after{width:240px;height:240px;left:-140px;bottom:-170px}
+    .hero-inner{position:relative;max-width:820px;margin:auto}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border:1px solid rgba(255,255,255,.24);border-radius:100px;font-size:12px;letter-spacing:1px;color:rgba(255,255,255,.82)}
+    .eyebrow i{width:7px;height:7px;border-radius:50%;background:#e7c46d;box-shadow:0 0 0 4px rgba(231,196,109,.15)}
+    h1{font-size:42px;line-height:1.15;letter-spacing:-1.4px;margin:22px 0 12px}
+    .hero p{max-width:620px;color:rgba(255,255,255,.75);font-size:15px}
+    .hero-meta{display:flex;gap:22px;flex-wrap:wrap;margin-top:28px;font-size:13px;color:rgba(255,255,255,.68)}
+    .hero-meta strong{color:#fff;font-weight:650}
+    .toolbar{position:sticky;top:0;z-index:20;padding:12px 16px;background:rgba(245,242,235,.88);backdrop-filter:blur(18px);border-bottom:1px solid rgba(215,208,195,.8)}
+    .toolbar-inner{max-width:820px;margin:auto;display:flex;gap:9px;align-items:center;flex-wrap:wrap;min-width:0}
+    .date-select,.search{height:40px;border:1px solid var(--line);background:var(--paper);border-radius:12px;padding:0 13px;color:var(--ink);outline:none}
+    .date-select:focus,.search:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(36,92,69,.1)}
+    .search{flex:1;min-width:180px}
+    .filter-row{width:100%;min-width:0;max-width:100%;display:flex;gap:7px;overflow-x:auto;padding-top:2px;scrollbar-width:none}.filter-row::-webkit-scrollbar{display:none}
+    .filter{border:0;white-space:nowrap;padding:7px 13px;border-radius:100px;background:rgba(255,253,248,.76);color:var(--muted);cursor:pointer}
+    .filter.active{background:var(--green);color:#fff}
+    main{max-width:820px;margin:auto;padding:30px 16px 70px}
+    .section-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px;gap:12px}
+    .section-head h2{font-size:24px;letter-spacing:-.5px}.section-head p{font-size:13px;color:var(--muted)}
+    .cards{display:grid;gap:14px}
+    .card{position:relative;background:var(--paper);border:1px solid rgba(228,223,212,.85);border-radius:var(--radius);padding:24px;box-shadow:0 2px 12px rgba(45,50,42,.035);transition:.25s ease;animation:rise .45s both}
+    .card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+    .card-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+    .number{width:28px;height:28px;display:grid;place-items:center;border-radius:50%;background:var(--ink);color:#fff;font-size:12px;font-weight:700}
+    .tag{padding:4px 10px;border-radius:100px;font-size:11px;font-weight:650;background:var(--green-soft);color:var(--green)}
+    .audience{font-size:11px;color:var(--muted);border:1px solid var(--line);padding:3px 9px;border-radius:100px}
+    .copy{margin-left:auto;border:0;border-radius:100px;background:#f0ece3;color:var(--green);font-size:12px;font-weight:650;padding:7px 12px;cursor:pointer}.copy:hover{background:var(--green);color:#fff}.copy.done{background:#2f8a63;color:#fff}
+    .card h3{font-size:21px;line-height:1.35;letter-spacing:-.35px;margin-bottom:12px}
+    .content{white-space:pre-line;font-size:15px;color:#3d403a}
+    .action{margin-top:17px;padding:13px 15px;border-left:3px solid var(--gold);background:#f8f3e7;border-radius:0 12px 12px 0;font-size:14px;color:#554725}.action strong{color:#87641f}
+    .empty{text-align:center;padding:70px 20px;color:var(--muted)}
+    .footer{text-align:center;color:#92958d;font-size:12px;padding:0 16px 42px}.footer b{color:var(--green)}
+    .toast{position:fixed;left:50%;bottom:28px;z-index:100;transform:translate(-50%,100px);opacity:0;background:#20221f;color:#fff;border-radius:100px;padding:10px 18px;font-size:13px;transition:.3s}.toast.show{transform:translate(-50%,0);opacity:1}
+    @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+    @media(max-width:600px){.hero{padding:44px 18px 30px}h1{font-size:31px}.hero-meta{gap:9px 18px;margin-top:21px}.toolbar{padding:10px}.toolbar-inner{display:grid;grid-template-columns:140px minmax(0,1fr);gap:7px}.filter-row{grid-column:1/-1}.date-select{width:140px;max-width:140px}.search{width:100%;min-width:0}.card{padding:18px;border-radius:18px;min-width:0;overflow:hidden}.card h3{font-size:18px}.content{font-size:14px;overflow-wrap:anywhere}.copy{margin-left:0}.section-head{align-items:flex-start;flex-direction:column;gap:2px}}
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <span class="eyebrow"><i></i> 每日 14:00 更新</span>
+      <h1>每日销售成长</h1>
+      <p>给服装老板、店长和销售团队的认知提醒与实战动作。每天读一点、练一点、当天做一点。</p>
+      <div class="hero-meta">
+        <span>今日 <strong id="todayCount">—</strong> 条</span>
+        <span>累计 <strong id="totalCount">—</strong> 条</span>
+        <span>更新于 <strong id="updatedAt">—</strong></span>
+      </div>
+    </div>
+  </header>
+
+  <nav class="toolbar" aria-label="内容筛选">
+    <div class="toolbar-inner">
+      <select class="date-select" id="dateSelect" aria-label="选择日期"></select>
+      <input class="search" id="searchInput" type="search" placeholder="搜索认知、跟进、成交……" aria-label="搜索内容">
+      <div class="filter-row" id="filters">
+        <button class="filter active" data-category="全部">全部</button>
+        <button class="filter" data-category="销售认知">销售认知</button>
+        <button class="filter" data-category="实战技巧">实战技巧</button>
+        <button class="filter" data-category="客户经营">客户经营</button>
+        <button class="filter" data-category="执行心态">执行心态</button>
+        <button class="filter" data-category="团队管理">团队管理</button>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <div class="section-head">
+      <div><h2 id="sectionTitle">今日内容</h2><p id="sectionNote">选择适合团队现状的内容分享，不必一次全部发完。</p></div>
+    </div>
+    <div class="cards" id="cards"><div class="empty">内容加载中……</div></div>
+  </main>
+
+  <footer class="footer"><b>大喜 · 每日销售成长</b><br>认知不是知道，而是能在现场做出更好的选择。</footer>
+  <div class="toast" id="toast">已复制，可以直接发群</div>
+
+<script>
+  let db=null,currentDate='',currentCategory='全部',keyword='';
+  const $=s=>document.querySelector(s);
+  const escapeHtml=s=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+  async function load(){
+    try{
+      const res=await fetch('data.json?v='+Date.now(),{cache:'no-store'});
+      if(!res.ok) throw new Error('HTTP '+res.status);
+      db=await res.json();
+      const dates=Object.keys(db.data||{}).sort().reverse();
+      currentDate=dates[0]||'';
+      $('#dateSelect').innerHTML=dates.map((d,i)=>`<option value="${d}">${i===0?'最新 · ':''}${d}</option>`).join('');
+      $('#updatedAt').textContent=db.updated_at||'—';
+      $('#totalCount').textContent=dates.reduce((n,d)=>n+(db.data[d]||[]).length,0);
+      render();
+    }catch(e){$('#cards').innerHTML='<div class="empty">数据加载失败，请稍后刷新重试。</div>';}
+  }
+  function render(){
+    const source=db?.data?.[currentDate]||[];
+    const items=source.filter(x=>(currentCategory==='全部'||x.category===currentCategory)&&(!keyword||[x.title,x.content,x.action,x.category,x.audience].join(' ').toLowerCase().includes(keyword)));
+    $('#todayCount').textContent=source.length;
+    $('#sectionTitle').textContent=currentDate===Object.keys(db.data).sort().reverse()[0]?'今日内容':currentDate+' 内容';
+    $('#sectionNote').textContent=items.length?`当前显示 ${items.length} 条 · 点击“复制整条”可直接发群`:'没有符合条件的内容';
+    $('#cards').innerHTML=items.length?items.map((x,i)=>`
+      <article class="card" style="animation-delay:${i*.05}s">
+        <div class="card-top"><span class="number">${i+1}</span><span class="tag">${escapeHtml(x.category)}</span><span class="audience">适合：${escapeHtml(x.audience)}</span><button class="copy" data-id="${escapeHtml(x.id)}">复制整条</button></div>
+        <h3>${escapeHtml(x.title)}</h3>
+        <div class="content">${escapeHtml(x.content)}</div>
+        <div class="action"><strong>今日行动：</strong>${escapeHtml(x.action)}</div>
+      </article>`).join(''):'<div class="empty">没有符合条件的内容，换个分类或关键词试试。</div>';
+    document.querySelectorAll('.copy').forEach(btn=>btn.onclick=()=>copyItem(btn.dataset.id,btn));
+  }
+  async function copyItem(id,btn){
+    const x=(db.data[currentDate]||[]).find(v=>v.id===id); if(!x)return;
+    const text=`【${x.title}】\n${x.content}\n\n今日行动：${x.action}`;
+    try{await navigator.clipboard.writeText(text)}catch(_){const t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove()}
+    btn.textContent='已复制';btn.classList.add('done');showToast();setTimeout(()=>{btn.textContent='复制整条';btn.classList.remove('done')},1800);
+  }
+  function showToast(){const t=$('#toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
+  $('#dateSelect').addEventListener('change',e=>{currentDate=e.target.value;render()});
+  $('#searchInput').addEventListener('input',e=>{keyword=e.target.value.trim().toLowerCase();render()});
+  $('#filters').addEventListener('click',e=>{if(!e.target.matches('.filter'))return;document.querySelectorAll('.filter').forEach(b=>b.classList.remove('active'));e.target.classList.add('active');currentCategory=e.target.dataset.category;render()});
+  load();
+</script>
+</body>
+</html>
